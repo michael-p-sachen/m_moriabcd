@@ -28,7 +28,6 @@ main {
 }
 
 .app-plane-hub {
-  /* Shrink when the row is narrower than plane + explorer min-width; else overflow:hidden clips the shell. */
   flex-shrink: 1;
   min-width: 0;
   align-self: flex-start;

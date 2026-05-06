@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { useMemo } from 'react';
-import { planeUnit, type PlaneCoordinates } from '../components/Plane';
+import { planeUnit, type PlaneCoordinates } from '../data';
 
 type DocumentTilePlacementInput = {
   centerPlacement: PlaneCoordinates;

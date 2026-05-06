@@ -22,4 +22,5 @@ export const isCollection = (doc: Document): doc is Collection => 'children' in 
 
 export const isSingleDocument = (doc: Document): doc is SingleDocument => 'documentSrc' in doc;
 
-export const isDocumentTrailer = (doc: Document): doc is DocumentTrailer => !isCollection(doc) && !isSingleDocument(doc);
+export const isDocumentTrailer = (doc: Document): doc is DocumentTrailer =>
+  !isCollection(doc) && !isSingleDocument(doc);

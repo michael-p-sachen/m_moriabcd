@@ -1,9 +1,29 @@
-import type { DocumentTileProps, NovepvntiTileProps } from '../components';
-import { planePx, PLANE_SIZE } from '../components/Plane';
+import {planePx, PLANE_SIZE, type PlaneCoordinates} from './plane';
+import type {CSSProperties} from "react";
+import type {Document} from "./Document.ts";
 
 export const DISTANCE_X = 1222;
 export const PRIMARY_X = 3311;
 export const MAJOR_TILE_EDGE = 727;
+
+export type NovepvntiTileProps = {
+  centerPlacement: PlaneCoordinates;
+  color: string;
+  size: number;
+  filter?: CSSProperties['filter'];
+  opacity?: CSSProperties['opacity'];
+  onClick?: () => void;
+};
+
+export type DocumentTileProps = {
+  centerPlacement: PlaneCoordinates;
+  width: number;
+  document: Document;
+  labelPinned?: boolean;
+  labelClickable?: boolean;
+  onClick?: () => void;
+  rootOpacity?: number;
+};
 
 export const matrixTileProps: NovepvntiTileProps = {
   color: '#b3baad',

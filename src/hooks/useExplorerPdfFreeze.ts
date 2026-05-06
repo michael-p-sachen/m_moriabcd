@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useState, useMemo } from 'react';
 import type { RefObject } from 'react';
-import type { Layout } from '../data/Document';
+import type { Layout } from '../data';
 
 const PDF_RENDER_DPR_CAP = 14;
 const PDF_RENDER_OVERSAMPLE = 2;
@@ -17,12 +17,7 @@ type UseExplorerPdfFreezeInput = {
   enabled: boolean;
 };
 
-export const useExplorerPdfFreeze = ({
-                                       frameRef,
-                                       documentSrc,
-                                       layout,
-                                       enabled,
-                                     }: UseExplorerPdfFreezeInput) => {
+export const useExplorerPdfFreeze = ({ frameRef, documentSrc, layout, enabled }: UseExplorerPdfFreezeInput) => {
   const [frozenPdf, setFrozenPdf] = useState<ExplorerPdfFrozenLayout | null>(null);
   const [currentWidth, setCurrentWidth] = useState<number>(0);
 

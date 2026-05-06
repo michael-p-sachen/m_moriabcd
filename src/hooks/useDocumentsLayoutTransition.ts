@@ -5,9 +5,8 @@ import {
   documentsReducer,
   type DocumentsAction,
   type DocumentsState,
-} from '../reducers/documentsReducer';
-import { documentTilesProps } from '../data';
-import { isSingleDocument, type SingleDocument } from '../data/Document';
+} from '../reducers';
+import { documentTilesProps, isSingleDocument, type SingleDocument } from '../data';
 
 const slotCount = documentTilesProps.length;
 
@@ -22,9 +21,7 @@ const IN_MS = 440;
 
 type AnimIdle = { kind: 'idle' };
 
-type AnimIntent =
-  | { type: 'click'; clickedIndex: number }
-  | { type: 'reset' };
+type AnimIntent = { type: 'click'; clickedIndex: number } | { type: 'reset' };
 
 type AnimOut = {
   kind: 'out';
@@ -153,9 +150,7 @@ export const useDocumentsLayoutTransition = () => {
     const expectedToken = anim.token;
     const id = requestAnimationFrame(() => {
       if (expectedToken !== transitionTokenRef.current) return;
-      setAnim((a) =>
-        a.kind === 'out' && !a.armed && a.token === expectedToken ? { ...a, armed: true } : a,
-      );
+      setAnim((a) => (a.kind === 'out' && !a.armed && a.token === expectedToken ? { ...a, armed: true } : a));
     });
     return () => cancelAnimationFrame(id);
   }, [anim]);
@@ -184,9 +179,7 @@ export const useDocumentsLayoutTransition = () => {
     id1 = requestAnimationFrame(() => {
       id2 = requestAnimationFrame(() => {
         if (expectedToken !== transitionTokenRef.current) return;
-        setAnim((a) =>
-          a.kind === 'in' && !a.entered && a.token === expectedToken ? { ...a, entered: true } : a,
-        );
+        setAnim((a) => (a.kind === 'in' && !a.entered && a.token === expectedToken ? { ...a, entered: true } : a));
       });
     });
     return () => {
@@ -207,11 +200,9 @@ export const useDocumentsLayoutTransition = () => {
 
   const transitionIdle = anim.kind === 'idle' && tilesOpacityIntroDone;
 
-  const displayDocuments =
-    anim.kind === 'out' ? anim.from.documents : state.documents;
+  const displayDocuments = anim.kind === 'out' ? anim.from.documents : state.documents;
 
-  const displayIndicesPath =
-    anim.kind === 'out' ? anim.to.indicesPath : state.indicesPath;
+  const displayIndicesPath = anim.kind === 'out' ? anim.to.indicesPath : state.indicesPath;
 
   const rootOpacityForIndex = (index: number): number => {
     if (anim.kind === 'idle') return 1;

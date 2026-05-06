@@ -1,6 +1,10 @@
-import { isCollection, type Document } from '../components';
-import { documentTilesProps } from '../data';
-import { allDocuments, matrixTileDocument } from '../data';
+import {
+  allDocuments,
+  documentTilesProps,
+  isCollection,
+  matrixTileDocument,
+  type Document,
+} from '../data';
 
 const slotCount = documentTilesProps.length;
 
@@ -25,8 +29,7 @@ const applyStep = (prev: DocumentsState, i: number): DocumentsState => {
   const children = isCollection(document) ? document.children : [];
   const next = Array.from({ length: slotCount }, () => undefined as Document | undefined);
 
-  const lastPathSlot =
-    prev.indicesPath.length > 0 ? prev.indicesPath[prev.indicesPath.length - 1]! : 0;
+  const lastPathSlot = prev.indicesPath.length > 0 ? prev.indicesPath[prev.indicesPath.length - 1]! : 0;
   for (let k = 0; k <= lastPathSlot; k += 1) {
     next[k] = prev.documents[k];
   }
