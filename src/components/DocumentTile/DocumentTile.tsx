@@ -14,6 +14,7 @@ export type DocumentTileProps = {
   labelPinned?: boolean;
   labelClickable?: boolean;
   onClick?: () => void;
+  rootOpacity?: number;
 };
 
 export const DocumentTile = ({
@@ -23,12 +24,14 @@ export const DocumentTile = ({
   labelPinned = false,
   labelClickable = false,
   onClick,
+  rootOpacity = 1,
 }: DocumentTileProps) => {
   const placementStyle = useDocumentTilePlacement({ centerPlacement, width: width });
   const tileClickable = onClick && !isDocumentTrailer(document);
 
   const documentStyle: CSSProperties = {
       ...placementStyle,
+      opacity: rootOpacity,
       cursor: tileClickable ? 'pointer' : 'default'
   };
 

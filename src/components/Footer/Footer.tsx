@@ -42,7 +42,7 @@ export const Footer = (props: FooterProps = { mode: 'text', prefixed: false }) =
         {props.mode === 'text' ? (
             <span className={`app-footer-text ${props.prefixed ? 'app-footer-text--prefixed' : ''}`}>
               {props.prefixed && (
-                  <span className='app-footer-text__prefix'>For object inquiry please contact :</span>
+                  <span className='app-footer-text__prefix'>for object inquiry please contact :</span>
               )}
               <span className='app-footer-text__email'>info@mmoriabcd.com</span>
             </span>

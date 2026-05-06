@@ -23,12 +23,10 @@ export const Explorer = ({ documentSrc, layout, firstPageSrc, bgColor, pdfPage =
   const [enablePageAnim, setEnablePageAnim] = useState(false);
 
   useLayoutEffect(() => {
-    console.log('1', enablePageAnim);
     setEnablePageAnim(false);
   }, [documentSrc]);
 
   useEffect(() => {
-    console.log('2', bgColor);
     if (pdfReady) {
       setEnablePageAnim(true);
     }
@@ -74,7 +72,6 @@ export const Explorer = ({ documentSrc, layout, firstPageSrc, bgColor, pdfPage =
                   <PdfDocument
                       file={documentSrc}
                       className={`explorer-pdf-doc explorer-pdf-layer ${enablePageAnim ? 'enable-page-transitions' : ''}`}
-
                       loading={null}
                       onLoadSuccess={(pdf) => {
                         setPdfReady(true);

@@ -58,7 +58,7 @@ export const allDocuments: Array<Document> = [
     getSingleDocumentForName('l0318'),
     getSingleDocumentForName('f0918'),
   ]),
-  getCollectionForName(OGGETTO_NAME, '#d3d6d9', [
+  getCollectionForName(OGGETTO_NAME, '#d3d6c9', [
     getSingleDocumentForName('m_moriabc'),
     getSingleDocumentForName(EDIZIONE_NAME),
     dirimeDocument,

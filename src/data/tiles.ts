@@ -17,7 +17,7 @@ export const matrixTileProps: NovepvntiTileProps = {
 };
 
 export const projectTileProps: NovepvntiTileProps = {
-  color: '#84887f',
+  color: '#cad3ca',
   size: 363,
   centerPlacement: {
     x: 3762,
@@ -36,10 +36,5 @@ export const documentTilesProps: Array<Pick<DocumentTileProps, 'width' | 'center
   }),
 );
 
-const maxContentX = Math.max(
-  PRIMARY_X + 7 * DISTANCE_X + MAJOR_TILE_EDGE / 2,
-  PRIMARY_X + matrixTileProps.size / 2,
-  projectTileProps.centerPlacement.x + projectTileProps.size / 2,
-);
-
-export const PLANE_X_OVERFLOW = Math.max(0, Math.ceil(maxContentX - PLANE_SIZE));
+const maxContentX = PRIMARY_X + 7 * DISTANCE_X + MAJOR_TILE_EDGE / 1.5;
+export const PLANE_X_OVERFLOW = maxContentX - PLANE_SIZE;

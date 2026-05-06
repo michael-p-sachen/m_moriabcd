@@ -3,7 +3,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 6vh;
+  height: 4vh;
   z-index: 10;
   box-sizing: border-box;
   border-top: 1px solid var(--color-stroke);
@@ -21,15 +21,15 @@
 .app-footer-nav {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
-  padding-right: 4vh;
+  gap: 0.5vh;
+  padding-right: calc(min(4vh, 3vh + 1vw));
   pointer-events: auto;
 }
 
 .app-footer-nav__btn {
   box-sizing: border-box;
-  width: 3vh;
-  height: 3vh;
+  width: 2vh;
+  height: 2vh;
   aspect-ratio: 1;
   padding: 0;
   display: inline-flex;
@@ -52,8 +52,8 @@
 
 .app-footer-nav__icon {
   display: block;
-  width: 52%;
-  height: 52%;
+  width: 62%;
+  height: 62%;
   flex-shrink: 0;
   stroke: var(--color-stroke);
   stroke-width: 2;
@@ -64,8 +64,8 @@
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
-  min-height: 4.5vh;
-  padding: 0.75vh 2vh 0.75vh 0;
+  min-height: 3vh;
+  padding: 0.75vh calc(min(2vh, 1vh + 1vw)) 0.75vh 0;
   color: var(--color-stroke);
   font-size: max(10px, 1.1vh);
   pointer-events: auto;
@@ -83,6 +83,7 @@
   -webkit-user-select: text;
   cursor: text;
   padding: 0 2vh 0 2vh;
+  transition: font-weight 0.4s ease;
 }
 
 .app-footer-text--prefixed .app-footer-text__email {

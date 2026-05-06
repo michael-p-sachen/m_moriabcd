@@ -1,8 +1,7 @@
-import { useCallback, useReducer } from 'react';
+import { useCallback } from 'react';
 import type { CSSProperties } from 'react';
 import { Footer, Plane, DocumentTile, NovepvntiTile, Explorer } from './components';
 import { PLANE_SIZE } from './components/Plane';
-import { createInitialDocumentsState, documentsReducer } from './reducers/documentsReducer';
 import {
   documentTilesProps,
   matrixTileProps,
@@ -11,15 +10,32 @@ import {
   projectTileProps
 } from './data';
 import './App.css';
-import {useExplorer} from "./hooks";
+import { useExplorer, useDocumentsLayoutTransition } from './hooks';
 
 export const App = () => {
-  const [{ documents, indicesPath }, dispatch] = useReducer(documentsReducer, undefined, createInitialDocumentsState);
-  const explorer = useExplorer(documents, indicesPath);
+  const {
+    documents,
+    indicesPath,
+    committedDocuments,
+    committedIndicesPath,
+    transitionIdle,
+    rootOpacityForIndex,
+    explorerShellStyle,
+    explorerDocument,
+    dispatch,
+    appTilesStyle,
+  } = useDocumentsLayoutTransition();
+  const explorer = useExplorer(committedDocuments, committedIndicesPath);
 
-  const onCollectionTileClick = useCallback((clickedIndex: number) => {
-    dispatch({ type: 'click', clickedIndex });
-  }, []);
+  const onCollectionTileClick = useCallback(
+    (clickedIndex: number) => {
+      if (!transitionIdle) {
+          return;
+      }
+      dispatch({ type: 'click', clickedIndex });
+    },
+    [dispatch, transitionIdle],
+  );
 
   const renderDocumentTiles = () =>
       documentTilesProps.map((props, index) => {
@@ -35,8 +51,13 @@ export const App = () => {
                 {...props}
                 document={doc}
                 labelPinned={inPath || index === 0}
-                labelClickable={inPath && latestIndex !== index}
-                onClick={![0, latestIndex].includes(index) ? () => onCollectionTileClick(index) : undefined}
+                labelClickable={transitionIdle && inPath && latestIndex !== index}
+                onClick={
+                    transitionIdle && ![0, latestIndex].includes(index)
+                        ? () => onCollectionTileClick(index)
+                        : undefined
+                }
+                rootOpacity={rootOpacityForIndex(index)}
             />
         );
       });
@@ -51,7 +72,10 @@ export const App = () => {
           downloadVisible={explorer.isDownloadable}
       />
   ) : (
-      <Footer mode='text' prefixed={indicesPath.some(i => documents[i]?.name === OGGETTO_NAME)} />
+      <Footer
+          mode='text'
+          prefixed={committedIndicesPath.some((i) => committedDocuments[i]?.name === OGGETTO_NAME)}
+      />
   );
 
   return (
@@ -61,23 +85,34 @@ export const App = () => {
             <Plane className='app-plane'>
               <NovepvntiTile
                   {...matrixTileProps}
-                  onClick={indicesPath.length === 0 ? () => onCollectionTileClick(0) : undefined}
+                  onClick={
+                      transitionIdle && indicesPath.length === 0 ? () => onCollectionTileClick(0) : undefined
+                  }
                   opacity={indicesPath.length > 0 ? 0.1 : matrixTileProps.opacity}
               />
+                <div className='app-tiles' style={appTilesStyle}>
               {renderDocumentTiles()}
-              <NovepvntiTile {...projectTileProps} onClick={() => dispatch({ type: 'reset' })} />
+                </div>
+              <NovepvntiTile
+                  {...projectTileProps}
+                  onClick={transitionIdle ? () => dispatch({ type: 'reset' }) : undefined}
+              />
             </Plane>
           </div>
-          {explorer.activeDoc && (
-              <Explorer
-                  layout={explorer.activeDoc.layout}
-                  documentSrc={explorer.activeDoc.documentSrc}
-                  firstPageSrc={explorer.activeDoc.firstPageSrc}
-                  bgColor={explorer.activeDoc.bgColor}
-                  pdfPage={explorer.pdfPage}
-                  onPdfLoaded={explorer.setPdfNumPages}
-              />
-          )}
+          <div className='app-explorer-shell' style={explorerShellStyle}>
+            {explorerDocument ? (
+                <Explorer
+                    layout={explorerDocument.layout}
+                    documentSrc={explorerDocument.documentSrc}
+                    firstPageSrc={explorerDocument.firstPageSrc}
+                    bgColor={explorerDocument.bgColor}
+                    pdfPage={explorer.activeDoc ? explorer.pdfPage : 1}
+                    onPdfLoaded={explorer.setPdfNumPages}
+                />
+            ) : (
+                <div className='app-explorer-placeholder' aria-hidden />
+            )}
+          </div>
         </div>
         {renderFooter()}
       </main>

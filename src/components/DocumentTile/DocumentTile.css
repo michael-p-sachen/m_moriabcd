@@ -1,7 +1,7 @@
 .document-tile-root {
   position: absolute;
   box-sizing: border-box;
-  transition: transform 0.4s ease;
+  transition: transform 0.4s ease, opacity 0.42s ease;
 }
 
 .document-tile-media {
