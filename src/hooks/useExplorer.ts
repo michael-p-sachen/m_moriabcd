@@ -1,7 +1,7 @@
 import { useState, useMemo, useLayoutEffect, useEffect } from 'react';
-import { EDIZIONE_NAME, isSingleDocument } from '../data';
+import { EDIZIONE_NAME, isSingleDocument, type Document } from '../data';
 
-export const useExplorer = (documents: any[], indicesPath: number[]) => {
+export const useExplorer = (documents: Array<Document | undefined>, indicesPath: number[]) => {
   const [pdfPage, setPdfPage] = useState(1);
   const [pdfNumPages, setPdfNumPages] = useState<number | null>(null);
 

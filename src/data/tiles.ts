@@ -1,6 +1,6 @@
-import {planePx, PLANE_SIZE, type PlaneCoordinates} from './plane';
-import type {CSSProperties} from "react";
-import type {Document} from "./Document.ts";
+import { planePx, PLANE_SIZE, type PlaneCoordinates } from './plane';
+import type { CSSProperties } from 'react';
+import type { Document } from './Document.ts';
 
 export const DISTANCE_X = 1222;
 export const PRIMARY_X = 3311;
