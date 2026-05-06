@@ -1,5 +1,5 @@
 export { useNovepvntiTilePlacement } from './useNovepvntiTilePlacement';
-export { useDocumentsLayoutTransition } from './useDocumentsLayoutTransition';
+export { useDocumentsNavigation } from './useDocumentsNavigation.ts';
 export { useDocumentTilePlacement } from './useDocumentTilePlacement';
 export { useExplorerPdfFreeze } from './useExplorerPdfFreeze';
 export { useExplorer } from './useExplorer';

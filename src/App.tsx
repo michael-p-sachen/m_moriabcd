@@ -10,7 +10,7 @@ import {
   projectTileProps,
 } from './data';
 import './App.css';
-import { useExplorer, useDocumentsLayoutTransition } from './hooks';
+import { useExplorer, useDocumentsNavigation } from './hooks';
 
 export const App = () => {
   const {
@@ -24,7 +24,7 @@ export const App = () => {
     explorerDocument,
     dispatch,
     appTilesStyle,
-  } = useDocumentsLayoutTransition();
+  } = useDocumentsNavigation();
   const explorer = useExplorer(committedDocuments, committedIndicesPath);
 
   const onCollectionTileClick = useCallback(
