@@ -3,7 +3,7 @@ import type { RefObject } from 'react';
 import type { Layout } from '../data';
 
 const PDF_RENDER_DPR_CAP = 14;
-const PDF_RENDER_OVERSAMPLE = 2;
+const PDF_RENDER_OVERSAMPLE = 3;
 
 export type ExplorerPdfFrozenLayout = {
   pageWidth: number;
