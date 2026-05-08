@@ -30,6 +30,7 @@ export const Explorer = ({ documentSrc, layout, firstPageSrc, bgColor, pdfPage =
     if (pdfReady) {
       setEnablePageAnim(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pdfPage]);
 
   const { frozenPdf, fitScale } = useExplorerPdfFreeze({
@@ -62,7 +63,7 @@ export const Explorer = ({ documentSrc, layout, firstPageSrc, bgColor, pdfPage =
       <div className='explorer-media'>
         <div
           className='explorer-frame'
-          style={{ backgroundColor: enablePageAnim && bgColor ? bgColor : 'transparent' }}
+          style={{ backgroundColor: pdfReady && bgColor ? bgColor : 'transparent' }}
           ref={frameRef}>
           {isLandscape ?
             <video
