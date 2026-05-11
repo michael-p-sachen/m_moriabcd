@@ -10,11 +10,12 @@ import {
 const COVER_PATH_PREFIX = '/covers/';
 const DOCUMENT_PATH_PREFIX = '/documents/';
 const FIRST_PAGE_PATH_PREFIX = '/documents-first-pages/';
+const DOWNLOADS_PATH_PREFIX = '/downloads/';
 
 export const OGGETTO_NAME = 'oggett0';
 export const EDIZIONE_NAME = 'edizi0ne';
-export const EDIZIONE_DOWNLOAD_FILE = `${EDIZIONE_NAME}-document.pdf`;
-export const EDIZIONE_DOWNLOAD_PATH = `${DOCUMENT_PATH_PREFIX}${EDIZIONE_DOWNLOAD_FILE}`;
+export const EDIZIONE_DOWNLOAD_FILE = `${EDIZIONE_NAME}.pdf`;
+export const EDIZIONE_DOWNLOAD_PATH = `${DOWNLOADS_PATH_PREFIX}${EDIZIONE_DOWNLOAD_FILE}`;
 
 const getCollectionForName = (name: string, bgColor: string, children: Array<Document>): Collection => ({
   name,
