@@ -8,7 +8,7 @@ import {
 } from './Document';
 
 const COVER_PATH_PREFIX = '/covers/';
-const DOCUMENT_PATH_PREFIX = '/documents/';
+const DOCUMENT_PATH_PREFIX = 'https://pub-b58cb12f5e34411e85cb0e02beccde4d.r2.dev/';
 const FIRST_PAGE_PATH_PREFIX = '/documents-first-pages/';
 
 export const OGGETTO_NAME = 'oggett0';
