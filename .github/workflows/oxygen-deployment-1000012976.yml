@@ -21,12 +21,12 @@ jobs:
       - name: Setup node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: 'lts/*'
           check-latest: true
 
       - name: Cache node modules
         id: cache-npm
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: cache-node-modules
         with:
@@ -40,18 +40,10 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Build and Publish to Oxygen
-        id: deploy
-        uses: shopify/oxygenctl-action@v4
-        with:
-          oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000012976 }}
-          build_command: 'npm run build'
+      - name: Build (Vite SPA → prepare → Hydrogen worker)
+        run: npm run build
 
-      - name: Create GitHub Deployment
-        uses: shopify/github-deployment-action@v1
-        if: always()
-        with:
-          token: ${{ github.token }}
-          environment: 'preview'
-          preview_url: ${{ steps.deploy.outputs.url }}
-          description: ${{ github.event.head_commit.message }}
+      - name: Deploy to Oxygen
+        run: npx shopify hydrogen deploy --no-build
+        env:
+          SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000012976 }}
