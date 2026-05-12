@@ -40,12 +40,29 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Build & Deploy to Oxygen (modern CLI)
-        # `npx shopify hydrogen deploy` would resolve to our pinned @shopify/cli-hydrogen 5.1.0
-        # which doesn't have the `deploy` subcommand — that landed in v7+. Force latest.
-        # `--build-command` overrides the default `shopify hydrogen build` so our full chain
-        # (vite build → prepare-oxygen → shopify hydrogen build) runs and dist/client/ gets
-        # populated with public/ contents before upload.
-        run: npx -y @shopify/cli@latest hydrogen deploy --build-command "npm run build" --force
-        env:
-          SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000012976 }}
+      - name: Build
+        run: npm run build
+
+      - name: Inspect dist/ before upload
+        run: |
+          echo "== dist =="
+          ls -la dist/ || true
+          echo "== dist/worker =="
+          ls -la dist/worker/ || true
+          echo "== dist/client (top-level) =="
+          ls -la dist/client/ || true
+          echo "== dist/client/covers =="
+          ls -la dist/client/covers/ 2>/dev/null | head -5 || echo "(missing)"
+          echo "== dist/client/assets =="
+          ls -la dist/client/assets/ 2>/dev/null || echo "(missing)"
+          echo "== dist/client/favicon.png =="
+          ls -la dist/client/favicon.png 2>/dev/null || echo "(missing)"
+
+      - name: Publish to Oxygen
+        uses: shopify/oxygenctl-action@v4
+        with:
+          oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000012976 }}
+          # No build_command — we already built above so dist/ has everything.
+          # (The action runs whatever's in build_command; passing empty is invalid,
+          # so just run a no-op echo.)
+          build_command: 'echo already built'
