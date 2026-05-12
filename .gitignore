@@ -10,7 +10,21 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist-spa
 *.local
+
+.env
+.env.*
+!.env.example
+
+scripts/.shopify-upload-state.json
+scripts/.r2-upload-state.json
+scripts/r2-uploads.json
+scripts/shopify-uploads.json
+public/assets
+
+.shopify
+.cache
 
 # Editor directories and files
 .vscode/*
