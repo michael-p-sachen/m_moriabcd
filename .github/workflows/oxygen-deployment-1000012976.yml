@@ -40,21 +40,12 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Build (Vite SPA → prepare → Hydrogen worker)
-        run: npm run build
-
-      - name: List dist/ (debug)
-        run: |
-          echo "== dist/ =="
-          ls -la dist/ || true
-          echo "== dist/client/ =="
-          ls -la dist/client/ || true
-          echo "== dist/worker/ =="
-          ls -la dist/worker/ || true
-
-      - name: Deploy to Oxygen (modern CLI)
+      - name: Build & Deploy to Oxygen (modern CLI)
         # `npx shopify hydrogen deploy` would resolve to our pinned @shopify/cli-hydrogen 5.1.0
         # which doesn't have the `deploy` subcommand — that landed in v7+. Force latest.
-        run: npx -y @shopify/cli@latest hydrogen deploy --no-build
+        # `--build-command` overrides the default `shopify hydrogen build` so our full chain
+        # (vite build → prepare-oxygen → shopify hydrogen build) runs and dist/client/ gets
+        # populated with public/ contents before upload.
+        run: npx -y @shopify/cli@latest hydrogen deploy --build-command "npm run build" --force
         env:
           SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000012976 }}
