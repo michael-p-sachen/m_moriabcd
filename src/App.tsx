@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import { Footer, Plane, DocumentTile, NovepvntiTile, Explorer } from './components';
 import {
   documentTilesProps,
+  isSingleDocument,
   matrixTileProps,
   OGGETTO_NAME,
   PLANE_SIZE,
@@ -11,6 +12,7 @@ import {
 } from './data';
 import './App.css';
 import { useExplorer, useDocumentsNavigation } from './hooks';
+import { prefetchPdfPriority } from './utils/pdfPrefetch';
 
 export const App = () => {
   const {
@@ -32,9 +34,13 @@ export const App = () => {
       if (!transitionIdle) {
         return;
       }
+      const clicked = documents[clickedIndex];
+      if (clicked && isSingleDocument(clicked) && clicked.documentSrc.endsWith('.pdf')) {
+        prefetchPdfPriority(clicked.documentSrc);
+      }
       dispatch({ type: 'click', clickedIndex });
     },
-    [dispatch, transitionIdle],
+    [dispatch, documents, transitionIdle],
   );
 
   const renderDocumentTiles = () =>
