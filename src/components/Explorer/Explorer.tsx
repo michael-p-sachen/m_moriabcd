@@ -7,7 +7,9 @@ import { useExplorerPdfFreeze } from '../../hooks';
 import type { SingleDocument } from '../../data';
 import './Explorer.css';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).toString();
+// Served from public/ as .js (not .mjs) because Oxygen's static handler doesn't
+// match .mjs and the splat route returns the SPA shell instead, breaking module loads.
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
 export type ExplorerProps = Pick<SingleDocument, 'documentSrc' | 'layout' | 'firstPageSrc' | 'bgColor'> & {
   pdfPage?: number;

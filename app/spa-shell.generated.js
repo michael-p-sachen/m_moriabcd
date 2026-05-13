@@ -11,7 +11,7 @@ export default `<!doctype html>
       name="viewport"
       content="width=device-width, initial-scale=1.0" />
     <title>m_moriabcd</title>
-    <script type="module" crossorigin src="/assets/index-Bo2d02TN.js"></script>
+    <script type="module" crossorigin src="/assets/index-BIWAMxte.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-Dw9g5Fuc.css">
   </head>
   <body>
