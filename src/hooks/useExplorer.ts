@@ -1,7 +1,11 @@
 import { useState, useMemo, useLayoutEffect, useEffect } from 'react';
-import { EDIZIONE_NAME, isSingleDocument, type Document } from '../data';
+import { EDIZIONE_NAME, isSingleDocument, type Document, type SingleDocument } from '../data';
 
-export const useExplorer = (documents: Array<Document | undefined>, indicesPath: number[]) => {
+export const useExplorer = (
+  documents: Array<Document | undefined>,
+  indicesPath: number[],
+  explorerDocument: SingleDocument | null,
+) => {
   const [pdfPage, setPdfPage] = useState(1);
   const [pdfNumPages, setPdfNumPages] = useState<number | null>(null);
 
@@ -9,13 +13,14 @@ export const useExplorer = (documents: Array<Document | undefined>, indicesPath:
 
   const activeDoc = useMemo(() => {
     const doc = latestIndex !== undefined ? documents[latestIndex] : null;
-    return doc && isSingleDocument(doc) ? doc : null;
-  }, [latestIndex, documents]);
+    if (doc && isSingleDocument(doc)) return doc;
+    return explorerDocument;
+  }, [latestIndex, documents, explorerDocument]);
 
   useLayoutEffect(() => {
     setPdfPage(1);
     setPdfNumPages(null);
-  }, [activeDoc?.documentSrc, activeDoc?.layout, latestIndex]);
+  }, [activeDoc?.documentSrc, activeDoc?.layout]);
 
   useEffect(() => {
     if (pdfNumPages) {

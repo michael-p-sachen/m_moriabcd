@@ -25,7 +25,7 @@ export const App = () => {
     dispatch,
     appTilesStyle,
   } = useDocumentsNavigation();
-  const explorer = useExplorer(committedDocuments, committedIndicesPath);
+  const explorer = useExplorer(committedDocuments, committedIndicesPath, explorerDocument);
 
   const onCollectionTileClick = useCallback(
     (clickedIndex: number) => {

@@ -14,6 +14,8 @@ export type ExplorerProps = Pick<SingleDocument, 'documentSrc' | 'layout' | 'fir
   onPdfLoaded?: (numPages: number) => void;
 };
 
+const VIDEO_CONTROLS_RESTRICT = 'nodownload noplaybackrate';
+
 export const Explorer = ({ documentSrc, layout, firstPageSrc, bgColor, pdfPage = 1, onPdfLoaded }: ExplorerProps) => {
   const frameRef = useRef<HTMLDivElement>(null);
   const isLandscape = layout === 'horizontal';
@@ -70,6 +72,8 @@ export const Explorer = ({ documentSrc, layout, firstPageSrc, bgColor, pdfPage =
               className='explorer-video'
               src={documentSrc}
               controls
+              controlsList={VIDEO_CONTROLS_RESTRICT}
+              disablePictureInPicture
               playsInline
             />
           : <div className='explorer-pdf-stack'>
@@ -82,6 +86,7 @@ export const Explorer = ({ documentSrc, layout, firstPageSrc, bgColor, pdfPage =
                 />
               )}
               <PdfDocument
+                key={documentSrc}
                 file={documentSrc}
                 className={`explorer-pdf-doc explorer-pdf-layer ${enablePageAnim ? 'enable-page-transitions' : ''}`}
                 loading={null}
