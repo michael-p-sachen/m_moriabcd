@@ -1,6 +1,7 @@
 import { useDocumentTilePlacement } from '../../hooks';
 import { planePx } from '../../data';
-import { type DocumentTileProps, isDocumentTrailer } from '../../data';
+import { type DocumentTileProps, isDocumentTrailer, isSingleDocument } from '../../data';
+import { prefetchPdf } from '../../utils/pdfPrefetch';
 import './DocumentTile.css';
 import type { CSSProperties, MouseEventHandler } from 'react';
 
@@ -26,6 +27,10 @@ export const DocumentTile = ({
   };
 
   const documentOnClick = tileClickable ? onClick : undefined;
+
+  const prefetchHref =
+    isSingleDocument(document) && document.documentSrc.endsWith('.pdf') ? document.documentSrc : undefined;
+  const onPrefetchHint = prefetchHref ? () => prefetchPdf(prefetchHref) : undefined;
 
   const coverStyle: CSSProperties = {
     opacity:
@@ -62,6 +67,8 @@ export const DocumentTile = ({
     <div
       className={'document-tile-root'}
       onClick={documentOnClick}
+      onPointerEnter={onPrefetchHint}
+      onTouchStart={onPrefetchHint}
       style={documentStyle}>
       {document.coverSrc && (
         <div
