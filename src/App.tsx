@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import type { CSSProperties } from 'react';
 import { Footer, Plane, DocumentTile, NovepvntiTile, Explorer } from './components';
 import {
-  allDocuments,
   documentTilesProps,
   matrixTileProps,
   OGGETTO_NAME,
@@ -12,7 +11,6 @@ import {
 } from './data';
 import './App.css';
 import { useExplorer, useDocumentsNavigation } from './hooks';
-import { collectPdfSrcs, prefetchPdfsSequentially } from './utils/pdfPrefetch';
 
 export const App = () => {
   const {
@@ -33,11 +31,6 @@ export const App = () => {
     (clickedIndex: number) => {
       if (!transitionIdle) {
         return;
-      }
-      // First nav interaction (matrix tile, slot 0) warms the cache for every
-      // downstream PDF, sequentially so we don't stampede the network.
-      if (clickedIndex === 0) {
-        prefetchPdfsSequentially(collectPdfSrcs(allDocuments));
       }
       dispatch({ type: 'click', clickedIndex });
     },
