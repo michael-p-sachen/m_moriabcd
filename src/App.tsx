@@ -12,7 +12,7 @@ import {
 } from './data';
 import './App.css';
 import { useExplorer, useDocumentsNavigation } from './hooks';
-import { prefetchPdfPriority } from './utils/pdfPrefetch';
+import { prefetchPdfNext } from './utils/pdfPrefetch';
 
 export const App = () => {
   const {
@@ -36,7 +36,7 @@ export const App = () => {
       }
       const clicked = documents[clickedIndex];
       if (clicked && isSingleDocument(clicked) && clicked.documentSrc.endsWith('.pdf')) {
-        prefetchPdfPriority(clicked.documentSrc);
+        prefetchPdfNext(clicked.documentSrc);
       }
       dispatch({ type: 'click', clickedIndex });
     },

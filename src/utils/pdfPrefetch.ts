@@ -3,7 +3,6 @@ import { type Document, isCollection, isSingleDocument } from '../data';
 const completed = new Set<string>();
 let queue: string[] = [];
 let currentUrl: string | null = null;
-let currentAbort: AbortController | null = null;
 let pumping = false;
 
 const pump = async (): Promise<void> => {
@@ -14,15 +13,13 @@ const pump = async (): Promise<void> => {
       const url = queue.shift()!;
       if (completed.has(url)) continue;
       currentUrl = url;
-      currentAbort = new AbortController();
       try {
-        const res = await fetch(url, { credentials: 'omit', mode: 'cors', signal: currentAbort.signal });
+        const res = await fetch(url, { credentials: 'omit', mode: 'cors' });
         if (res.ok) completed.add(url);
       } catch {
-        // aborted or network error — leave uncompleted so a future call can retry
+        // network error — leave uncompleted so a future call can retry
       }
       currentUrl = null;
-      currentAbort = null;
     }
   } finally {
     pumping = false;
@@ -44,18 +41,16 @@ export const prefetchPdf = (url: string): void => {
   void pump();
 };
 
-// User explicitly opened a doc: jump it to the front of the queue and abort
-// whatever sequential fetch is currently in flight so it doesn't compete
-// with pdfjs for bandwidth. The aborted URL is re-queued right behind it.
-export const prefetchPdfPriority = (url: string): void => {
+// User opened a doc: pull it to the front of the queue so it's fetched next.
+// We deliberately do NOT abort the fetch in flight — interrupting a large PDF
+// mid-stream throws away the bytes already on the wire and makes the browser
+// re-request it (often as a 206 Range retry), which is the churn we're trying
+// to avoid. Letting the current fetch finish and taking the clicked URL next
+// keeps the pipe sequential while still prioritizing what the user wants.
+export const prefetchPdfNext = (url: string): void => {
   if (!url || completed.has(url) || url === currentUrl) return;
   queue = queue.filter((u) => u !== url);
   queue.unshift(url);
-  if (currentUrl && currentAbort) {
-    const aborted = currentUrl;
-    currentAbort.abort();
-    queue.splice(1, 0, aborted);
-  }
   void pump();
 };
 
