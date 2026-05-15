@@ -31,7 +31,10 @@ const enqueueBack = (url: string): void => {
   queue.push(url);
 };
 
-export const prefetchPdfsSequentially = (urls: string[]): void => {
+// Feed the single sequential pipe in priority order. Because there's one
+// worker draining the queue front-to-back, the order URLs are passed in IS
+// the load order: covers, then first-page placeholders, then large PDFs.
+export const prefetchSequentially = (urls: string[]): void => {
   for (const url of urls) enqueueBack(url);
   void pump();
 };
@@ -46,7 +49,7 @@ export const prefetchPdf = (url: string): void => {
 // mid-stream throws away the bytes already on the wire and makes the browser
 // re-request it (often as a 206 Range retry), which is the churn we're trying
 // to avoid. Letting the current fetch finish and taking the clicked URL next
-// keeps the pipe sequential while still prioritizing what the user wants.
+// gets the doc as soon as possible without disrupting the pipe.
 export const prefetchPdfNext = (url: string): void => {
   if (!url || completed.has(url) || url === currentUrl) return;
   queue = queue.filter((u) => u !== url);
@@ -54,14 +57,35 @@ export const prefetchPdfNext = (url: string): void => {
   void pump();
 };
 
+const walk = (docs: Array<Document>, visit: (d: Document) => void): void => {
+  for (const d of docs) {
+    visit(d);
+    if (isCollection(d)) walk(d.children, visit);
+  }
+};
+
+// coverSrc lives on the shared trailer type, so collections and bare trailers
+// have one too. Pre-order traversal puts the top-level grid covers first.
+export const collectCoverSrcs = (docs: Array<Document>): string[] => {
+  const out: string[] = [];
+  walk(docs, (d) => {
+    if (d.coverSrc) out.push(d.coverSrc);
+  });
+  return out;
+};
+
+export const collectFirstPageSrcs = (docs: Array<Document>): string[] => {
+  const out: string[] = [];
+  walk(docs, (d) => {
+    if (isSingleDocument(d) && d.firstPageSrc) out.push(d.firstPageSrc);
+  });
+  return out;
+};
+
 export const collectPdfSrcs = (docs: Array<Document>): string[] => {
   const out: string[] = [];
-  for (const d of docs) {
-    if (isSingleDocument(d)) {
-      if (d.documentSrc.endsWith('.pdf')) out.push(d.documentSrc);
-    } else if (isCollection(d)) {
-      out.push(...collectPdfSrcs(d.children));
-    }
-  }
+  walk(docs, (d) => {
+    if (isSingleDocument(d) && d.documentSrc.endsWith('.pdf')) out.push(d.documentSrc);
+  });
   return out;
 };
